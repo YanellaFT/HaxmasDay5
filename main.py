@@ -1,10 +1,20 @@
 import flask
 import sqlite3
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 app = flask.Flask(
     __name__,
     static_folder="static",
     static_url_path="/"
+)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day"],
+    storage_uri="memory://",
 )
 
 conn = sqlite3.connect('gifts.db') 
@@ -20,10 +30,12 @@ conn.commit()
 conn.close()
 
 @app.get("/")
+@limiter.limit("10 per day")
 def index():
     return flask.send_from_directory("static", "index.html")
 
 @app.post("/gifts")
+@limiter.limit("10 per day")
 def create_gift():
     data = flask.request.get_json()
     name = data.get('name')
@@ -38,6 +50,7 @@ def create_gift():
     return '', 201
     
 @app.get("/gifts")
+@limiter.limit("10 per day")
 def get_gifts():
     conn = sqlite3.connect('gifts.db')
     cursor = conn.cursor()

@@ -1,9 +1,22 @@
 body {
     margin: 0;
     padding: 0;
+    background-image: url("assets/snowbg.jpeg");
+    background-color: aqua;
+    font-family: cursive;
 }
 
 .content {
     text-align: center;
-    font-family: Arial, sans-serif;
+}
+
+.list {
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 80, 200);
+    width: 300px;
+    padding: 1rem;
+    box-sizing: border-box;
+    margin: 1rem auto;
+    border-radius: 12px;
 }
